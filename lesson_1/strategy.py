@@ -1,0 +1,40 @@
+class CardMaker():
+    def __init__(self, title: str, format, padding: int = 2):
+        self.title = title
+        self.format = format
+        self.padding = padding
+
+    def make(self, data: float) -> str:
+        text_data = self.format.format(data)
+        return "\n".join(self._get_lines(text_data))
+
+    def _get_lines(self, text: str):
+        width = max(len(self.title), len(text)) + self.padding * 2
+        yield f"╔{"═"*width}╗"
+        yield f"║{self.title:^{width}}║"
+        yield f"║{text:^{width}}║"
+        yield f"╚{"═"*width}⁠╝"
+
+
+class PercentFormat:
+    def format(self, data: float) -> str:
+        return f"{data*100:.0f}%"
+
+
+class CurrentyFormat:
+    def format(self, data: float) -> str:
+        return f"${data:.2f}"
+
+
+def main():
+    percent_card_maker = CardMaker("Проценты", PercentFormat())
+    percent_card = percent_card_maker.make(0.6)
+    print(percent_card)
+
+    currency_card_maker = CardMaker("Цена", CurrentyFormat())
+    currency_card = currency_card_maker.make(25)
+    print(currency_card)
+
+
+if __name__ == "__main__":
+    main()
